@@ -1,6 +1,10 @@
 import type { AWS } from '@serverless/typescript';
 import { createFarmer, getFarmers, getFarmer } from '@functions/Farmer';
 import { createCrop, getCrops, getCrop } from '@functions/Crop';
+import FarmBuddyFarmersTableRes from './resources/FarmBuddyFarmersTable';
+import FarmBuddyCropsTableRes from './resources/FarmBuddyCropsTable';
+import IAMFarmBuddyFarmersTable from './iam/FarmBuddyFarmersTable';
+import IAMFarmBuddyCropsTable from './iam/FarmBuddyCropsTable';
 
 const serverlessConfiguration: AWS = {
   service: 'farmbuddyapi',
@@ -39,59 +43,15 @@ const serverlessConfiguration: AWS = {
       FARM_BUDDY_CROPS_TABLE: "${self:custom.FarmBuddyCropsTable.name}"
     },
     iamRoleStatements: [
-      {
-        Effect: "Allow",
-        Action: ["dynamodb:PutItem","dynamodb:Scan","dynamodb:GetItem","dynamodb:UpdateItem","dynamodb:Query"],
-        Resource: ["${self:custom.FarmBuddyFarmersTable.arn}"]
-      },
-      {
-        Effect: "Allow",
-        Action: ["dynamodb:PutItem","dynamodb:Scan","dynamodb:GetItem","dynamodb:UpdateItem","dynamodb:Query"],
-        Resource: ["${self:custom.FarmBuddyCropsTable.arn}"]
-      },
+      IAMFarmBuddyFarmersTable,
+      IAMFarmBuddyCropsTable,
     ],
     lambdaHashingVersion: '20201221',
   },
   resources: {
     Resources: {
-      FarmBuddyFarmersTable: {
-        Type: "AWS::DynamoDB::Table",
-        Properties: {
-          TableName: "FarmBuddyFarmersTables-${self:provider.stage}",
-          BillingMode: "PAY_PER_REQUEST",
-          AttributeDefinitions: [
-            {
-              AttributeName: "id",
-              AttributeType: "S"
-            }
-          ],
-          KeySchema: [
-            {
-              AttributeName: "id",
-              KeyType: "HASH"
-            }
-          ]
-        }
-      },
-      FarmBuddyCropsTable:{
-        Type: "AWS::DynamoDB::Table",
-        Properties: {
-          TableName: "FarmBuddyCropsTable-${self:provider.stage}",
-          BillingMode: "PAY_PER_REQUEST",
-          AttributeDefinitions: [
-            {
-              AttributeName: "id",
-              AttributeType: "S"
-            }
-          ],
-          KeySchema: [
-            {
-              AttributeName: "id",
-              KeyType: "HASH"
-            }
-          ]
-        }
-      }
+      FarmBuddyFarmersTable: FarmBuddyFarmersTableRes,
+      FarmBuddyCropsTable: FarmBuddyCropsTableRes,
     }
   },
   functions: { getFarmers, createFarmer, getFarmer, createCrop, getCrops, getCrop },
