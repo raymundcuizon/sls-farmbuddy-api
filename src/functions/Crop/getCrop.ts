@@ -9,18 +9,17 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-const getFarmer = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  
+const getCrop = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+
   const { id } = event.pathParameters;
   let response;
 
   try {
     const result = await dynamodb.get({
-        TableName: process.env.FARM_BUDDY_FARMERS_TABLE,
+        TableName: process.env.FARM_BUDDY_CROPS_TABLE,
         Key: { id }
     }).promise();
     response = result.Item;
-
   } catch (e) {
     console.error(e);
     throw new createError.InternalServerError(e);
@@ -38,4 +37,4 @@ const getFarmer = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyRe
   });
 }
 
-export const main = middyfy(getFarmer);
+export const main = middyfy(getCrop);

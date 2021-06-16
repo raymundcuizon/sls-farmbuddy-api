@@ -1,12 +1,12 @@
 import middy from "@middy/core"
-import middyJsonBodyParser from "@middy/http-json-body-parser";
 import httpErrorHandler from '@middy/http-error-handler';
 import httpEventNormalizer from '@middy/http-event-normalizer';
+import httpJsonBodyParser from '@middy/http-json-body-parser';
 // import cors from '@middy/http-cors';
 
 export const middyfy = (handler) => {
   return middy(handler).use([
-    middyJsonBodyParser(),
+    httpJsonBodyParser(),
     httpEventNormalizer(),
     httpErrorHandler(),
     // cors(),

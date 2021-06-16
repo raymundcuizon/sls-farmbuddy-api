@@ -1,5 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 import { createFarmer, getFarmers, getFarmer } from '@functions/Farmer';
+import { createCrop, getCrops, getCrop } from '@functions/Crop';
 
 const serverlessConfiguration: AWS = {
   service: 'farmbuddyapi',
@@ -13,6 +14,12 @@ const serverlessConfiguration: AWS = {
       name : { "Ref": "FarmBuddyFarmersTable" },
       arn: {
         "Fn::GetAtt": ["FarmBuddyFarmersTable","Arn"]
+      }
+    },
+    FarmBuddyCropsTable: {
+      name : { "Ref": "FarmBuddyCropsTable" },
+      arn: {
+        "Fn::GetAtt": ["FarmBuddyCropsTable","Arn"]
       }
     }
   },
@@ -28,23 +35,20 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      FARM_BUDDY_FARMERS_TABLE: "${self:custom.FarmBuddyFarmersTable.name}"
+      FARM_BUDDY_FARMERS_TABLE: "${self:custom.FarmBuddyFarmersTable.name}",
+      FARM_BUDDY_CROPS_TABLE: "${self:custom.FarmBuddyCropsTable.name}"
     },
     iamRoleStatements: [
       {
         Effect: "Allow",
-        Action: [
-          "dynamodb:PutItem",
-          "dynamodb:Scan",
-          "dynamodb:GetItem",
-          "ynamodb:UpdateItem",
-          "dynamodb:Query",
-          "dynamodb:BatchWriteItem",
-        ],
-        Resource: [
-          "${self:custom.FarmBuddyFarmersTable.arn}"
-        ]
-      }
+        Action: ["dynamodb:PutItem","dynamodb:Scan","dynamodb:GetItem","dynamodb:UpdateItem","dynamodb:Query"],
+        Resource: ["${self:custom.FarmBuddyFarmersTable.arn}"]
+      },
+      {
+        Effect: "Allow",
+        Action: ["dynamodb:PutItem","dynamodb:Scan","dynamodb:GetItem","dynamodb:UpdateItem","dynamodb:Query"],
+        Resource: ["${self:custom.FarmBuddyCropsTable.arn}"]
+      },
     ],
     lambdaHashingVersion: '20201221',
   },
@@ -53,15 +57,11 @@ const serverlessConfiguration: AWS = {
       FarmBuddyFarmersTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
-          TableName: "FarmBuddyFarmersTable-${self:provider.stage}",
+          TableName: "FarmBuddyFarmersTables-${self:provider.stage}",
           BillingMode: "PAY_PER_REQUEST",
           AttributeDefinitions: [
             {
               AttributeName: "id",
-              AttributeType: "S"
-            },
-            {
-              AttributeName: "name",
               AttributeType: "S"
             }
           ],
@@ -69,17 +69,32 @@ const serverlessConfiguration: AWS = {
             {
               AttributeName: "id",
               KeyType: "HASH"
-            },
+            }
+          ]
+        }
+      },
+      FarmBuddyCropsTable:{
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          TableName: "FarmBuddyCropsTable-${self:provider.stage}",
+          BillingMode: "PAY_PER_REQUEST",
+          AttributeDefinitions: [
             {
-              AttributeName: "name",
-              KeyType: "RANGE"
+              AttributeName: "id",
+              AttributeType: "S"
+            }
+          ],
+          KeySchema: [
+            {
+              AttributeName: "id",
+              KeyType: "HASH"
             }
           ]
         }
       }
     }
   },
-  functions: { getFarmers, createFarmer, getFarmer },
+  functions: { getFarmers, createFarmer, getFarmer, createCrop, getCrops, getCrop },
 };
 
 module.exports = serverlessConfiguration;
