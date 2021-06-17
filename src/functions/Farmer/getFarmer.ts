@@ -1,9 +1,8 @@
 import 'source-map-support/register';
-import * as createError from 'http-errors';
 import { DynamoDB } from 'aws-sdk';
 import { middyfy } from '@libs/lambda';
 
-import { formatJSONResponse } from '@libs/apiGateway';
+import { ResponseMsg } from '@libs/responseMessage';
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
@@ -12,30 +11,21 @@ const dynamodb = new DynamoDB.DocumentClient();
 const getFarmer = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   
   const { id } = event.pathParameters;
-  let response;
-
   try {
     const result = await dynamodb.get({
         TableName: process.env.FARM_BUDDY_FARMERS_TABLE,
         Key: { id }
     }).promise();
-    response = result.Item;
+
+    if(!result.Item) return ResponseMsg.error(404, 'Item not found!');
+
+    return ResponseMsg.success(result.Item);
 
   } catch (e) {
     console.error(e);
-    throw new createError.InternalServerError(e);
+    return ResponseMsg.error(e.code, e.message)
   }
 
-  if(!response) {
-    return {
-      statusCode: 404,
-      body: `Item not found`
-    }
-  }
-
-  return formatJSONResponse({
-    response
-  });
 }
 
 export const main = middyfy(getFarmer);

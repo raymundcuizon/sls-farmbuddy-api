@@ -7,16 +7,19 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import createFarmerSchema from './schema/createFarmer';
-import * as createError from 'http-errors';
+import { ResponseMsg } from '@libs/responseMessage';
 
 const dynamodb = new DynamoDB.DocumentClient();
 
 const createFarmer: ValidatedEventAPIGatewayProxyEvent<typeof createFarmerSchema> = async (event) => {
   
   const { name } = event.body;
+  const timestamp = new Date().toISOString();
   const farmer = {
     id: uuid(),
     name,
+    createdAt: timestamp,
+    updatedAt: timestamp,
   };
   try {
     await dynamodb.put({
@@ -24,11 +27,12 @@ const createFarmer: ValidatedEventAPIGatewayProxyEvent<typeof createFarmerSchema
       Item: farmer
     }).promise();
 
+    return formatJSONResponse(farmer);
   } catch(e){
     console.error(e);
-    throw new createError.InternalServerError(e);
+    return ResponseMsg.error(e.code, e.message);
   }
-  return formatJSONResponse(farmer);
+  
 }
 
 export const main = middyfy(createFarmer);
