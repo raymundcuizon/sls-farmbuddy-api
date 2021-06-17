@@ -14,6 +14,7 @@ const serverlessConfiguration: AWS = {
       webpackConfig: './webpack.config.js',
       includeModules: true,
     },
+    authorizer: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth-service-${self:provider.stage}-auth",
     FarmBuddyFarmersTable: {
       name : { "Ref": "FarmBuddyFarmersTable" },
       arn: {
@@ -27,7 +28,7 @@ const serverlessConfiguration: AWS = {
       }
     }
   },
-  plugins: ['serverless-webpack'],
+  plugins: ['serverless-webpack', 'serverless-pseudo-parameters'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',

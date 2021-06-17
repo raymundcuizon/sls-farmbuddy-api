@@ -8,6 +8,8 @@ export const createCrop = {
         http: {
           method: 'post',
           path: 'crop/create',
+          authorizer: "${self:custom.authorizer}",
+          cors: true,
           request: {
             schema: {
               'application/json': createCropSchema
@@ -25,6 +27,8 @@ export const getCrops = {
       http: {
         method: 'get',
         path: 'crops',
+        cors: true,
+        authorizer: "${self:custom.authorizer}",
       }
     }
   ]
@@ -37,6 +41,8 @@ export const getCrop = {
       http: {
         method: 'get',
         path: 'crop/{id}',
+        cors: true,
+        authorizer: "${self:custom.authorizer}",
       }
     }
   ]

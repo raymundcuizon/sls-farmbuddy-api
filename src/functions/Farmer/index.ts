@@ -8,6 +8,8 @@ export const createFarmer = {
         http: {
           method: 'post',
           path: 'farmer/create',
+          cors: true,
+          authorizer: "${self:custom.authorizer}",
           request: {
             schema: {
               'application/json': createFarmerSchema
@@ -25,6 +27,8 @@ export const getFarmers = {
       http: {
         method: 'get',
         path: 'farmers',
+        cors: true,
+        authorizer: "${self:custom.authorizer}",
       }
     }
   ]
@@ -37,6 +41,8 @@ export const getFarmer = {
       http: {
         method: 'get',
         path: 'farmer/{id}',
+        cors: true,
+        authorizer: "${self:custom.authorizer}",
       }
     }
   ]
