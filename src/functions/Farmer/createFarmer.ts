@@ -4,7 +4,6 @@ import { DynamoDB } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
-import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import createFarmerSchema from './schema/createFarmer';
 import { ResponseMsg } from '@libs/responseMessage';
@@ -27,7 +26,7 @@ const createFarmer: ValidatedEventAPIGatewayProxyEvent<typeof createFarmerSchema
       Item: farmer
     }).promise();
 
-    return formatJSONResponse(farmer);
+    return ResponseMsg.success(farmer);
   } catch(e){
     console.error(e);
     return ResponseMsg.error(e.code, e.message);

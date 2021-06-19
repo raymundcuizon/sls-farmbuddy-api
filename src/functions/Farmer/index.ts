@@ -20,6 +20,25 @@ export const createFarmer = {
     ]
   }
 
+  export const updateFarmer = {
+    handler: `${handlerPath(__dirname)}/updateFarmer.main`,
+    events: [
+      {
+        http: {
+          method: 'put',
+          path: 'farmer/update/{id}',
+          cors: true,
+          authorizer: "${self:custom.authorizer}",
+          request: {
+            schema: {
+              'application/json': createFarmerSchema
+            }
+          }
+        }
+      }
+    ]
+  }
+
 export const getFarmers = {
   handler: `${handlerPath(__dirname)}/getFarmers.main`,
   events: [
