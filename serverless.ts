@@ -1,12 +1,14 @@
 import type { AWS } from '@serverless/typescript';
 import { createFarmer, getFarmers, getFarmer, updateFarmer } from '@functions/Farmer';
 import { createCrop, getCrops, getCrop } from '@functions/Crop';
+import { createFarmersCrop } from '@functions/FarmersCrop';
 import FarmBuddyFarmersTableRes from './resources/FarmBuddyFarmersTable';
 import FarmBuddyCropsTableRes from './resources/FarmBuddyCropsTable';
 import IAMFarmBuddyFarmersTable from './iam/FarmBuddyFarmersTable';
 import IAMFarmBuddyCropsTable from './iam/FarmBuddyCropsTable';
 import IAMFarmBuddyFarmersCropTable from './iam/FarmBuddyFarmersCropTable';
 import FarmBuddyFarmersCropTableRes from './resources/FarmBuddyFarmersCropTable';
+
 
 const serverlessConfiguration: AWS = {
   service: 'farmbuddyapi',
@@ -60,7 +62,11 @@ const serverlessConfiguration: AWS = {
       FarmBuddyFarmersCropTable: FarmBuddyFarmersCropTableRes
     }
   },
-  functions: { getFarmers, createFarmer, getFarmer, updateFarmer, createCrop, getCrops, getCrop, },
+  functions: { 
+    getFarmers, createFarmer, getFarmer, updateFarmer, 
+    createCrop, getCrops, getCrop, 
+    createFarmersCrop
+  },
 };
 
 module.exports = serverlessConfiguration;

@@ -12,11 +12,12 @@ const dynamodb = new DynamoDB.DocumentClient();
 
 const createFarmer: ValidatedEventAPIGatewayProxyEvent<typeof createFarmerSchema> = async (event) => {
   
-  const { name } = event.body;
+  const { name, address } = event.body;
   const timestamp = new Date().toISOString();
   const farmer = {
     id: uuid(),
     name,
+    address: address,
     createdAt: timestamp,
     updatedAt: timestamp,
   };
@@ -31,7 +32,6 @@ const createFarmer: ValidatedEventAPIGatewayProxyEvent<typeof createFarmerSchema
     console.error(e);
     return ResponseMsg.error(e.code, e.message);
   }
-  
 }
 
 export const main = middyfy(createFarmer);

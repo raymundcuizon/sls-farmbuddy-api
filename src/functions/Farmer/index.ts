@@ -12,7 +12,7 @@ export const createFarmer = {
           authorizer: "${self:custom.authorizer}",
           request: {
             schema: {
-              'application/json': createFarmerSchema
+              'application/json': createFarmerSchema,
             }
           }
         }
