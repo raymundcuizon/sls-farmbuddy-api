@@ -1,7 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 import { createFarmer, getFarmers, getFarmer, updateFarmer } from '@functions/Farmer';
 import { createCrop, getCrops, getCrop } from '@functions/Crop';
-import { createFarmersCrop } from '@functions/FarmersCrop';
+import { createFarmersCrop, getFarmerCrops } from '@functions/FarmersCrop';
 import FarmBuddyFarmersTableRes from './resources/FarmBuddyFarmersTable';
 import FarmBuddyCropsTableRes from './resources/FarmBuddyCropsTable';
 import IAMFarmBuddyFarmersTable from './iam/FarmBuddyFarmersTable';
@@ -29,7 +29,16 @@ const serverlessConfiguration: AWS = {
     },
     FarmBuddyFarmersCropTable: {
       name : { "Ref": "FarmBuddyFarmersCropTable" },
-      arn: { "Fn::GetAtt": ["FarmBuddyFarmersCropTable","Arn"] }
+      arn: { "Fn::GetAtt": ["FarmBuddyFarmersCropTable","Arn"] },
+      farmersCropIndex: 
+      { "Fn::Join" : 
+        [ 
+          "/", [
+            { "Fn::GetAtt": ["FarmBuddyFarmersCropTable","Arn"] },
+            "index", "farmersCrop"
+          ]
+        ] 
+      }
     }
   },
   plugins: ['serverless-webpack', 'serverless-pseudo-parameters'],
@@ -65,7 +74,7 @@ const serverlessConfiguration: AWS = {
   functions: { 
     getFarmers, createFarmer, getFarmer, updateFarmer, 
     createCrop, getCrops, getCrop, 
-    createFarmersCrop
+    createFarmersCrop, getFarmerCrops
   },
 };
 

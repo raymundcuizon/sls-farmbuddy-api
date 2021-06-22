@@ -11,7 +11,7 @@ import { ResponseMsg } from '@libs/responseMessage';
 const dynamodb = new DynamoDB.DocumentClient();
 
 async function createFarmersCrop(event) {
-  const { farmerId, cropId, farmerName, cropName, landArea, plantCount  } = event.body;
+  const { farmerId, cropId, farmerName, cropName, landArea, plantCount, locationReg, locationProv, locationCity  } = event.body;
   const timestamp = new Date().toISOString();
   const farmersCrop = {
     id: uuid(),
@@ -21,6 +21,9 @@ async function createFarmersCrop(event) {
     cropName,
     landArea,
     plantCount,
+    locationReg,
+    locationProv,
+    locationCity,
     createdAt: timestamp,
     updatedAt: timestamp,
   };
@@ -29,7 +32,6 @@ async function createFarmersCrop(event) {
       TableName: process.env.FARM_BUDDY_FARMERS_CROP_TABLE,
       Item: farmersCrop
     }).promise();
-
     return ResponseMsg.success(farmersCrop);
   } catch(e){
     console.error(e);

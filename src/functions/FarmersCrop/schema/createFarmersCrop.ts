@@ -8,10 +8,23 @@ export default {
         cropId: { type: 'string' },
         farmerName: { type: 'string' },
         cropName: { type: 'string' },
-        landArea: { type: 'string' },
+        landArea: { type: 'number' },
         plantCount: { type: 'number' },
+        locationReg: { type: 'string' },
+        locationProv: { type: 'string' },
+        locationCity: { type: 'string' },
       },
-      required: ['farmerId','cropId','farmerName','cropName','landArea','plantCount'],
+      required: [
+        'farmerId',
+        'cropId',
+        'farmerName',
+        'cropName',
+        'landArea',
+        'plantCount',
+        'locationReg',
+        'locationProv',
+        'locationCity'
+      ],
     }
   },
   required: ['body']
