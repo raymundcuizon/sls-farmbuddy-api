@@ -15,6 +15,22 @@ export default {
         {
           AttributeName: "cropId",
           AttributeType: "S"
+        },
+        {
+          AttributeName: "locationReg",
+          AttributeType: "S"
+        },
+        {
+          AttributeName: "locationProv",
+          AttributeType: "S"
+        },
+        {
+          AttributeName: "locationCity",
+          AttributeType: "S"
+        },
+        {
+          AttributeName: "updatedAt",
+          AttributeType: "S"
         }
       ],
       KeySchema: [
@@ -32,13 +48,77 @@ export default {
                     KeyType: "HASH"
                 },
                 {
-                    AttributeName: "cropId",
+                    AttributeName: "updatedAt",
                     KeyType: "RANGE"
                 }
             ],
             Projection : {
                 ProjectionType: "ALL"
             }
+        },
+        {
+          IndexName: "IcropId",
+          KeySchema: [
+              {
+                  AttributeName: "cropId",
+                  KeyType: "HASH"
+              },
+              {
+                  AttributeName: "updatedAt",
+                  KeyType: "RANGE"
+              }
+          ],
+          Projection : {
+              ProjectionType: "ALL"
+          }
+        },
+        {
+          IndexName: "IlocationReg",
+          KeySchema: [
+              {
+                  AttributeName: "locationReg",
+                  KeyType: "HASH"
+              },
+              {
+                  AttributeName: "updatedAt",
+                  KeyType: "RANGE"
+              }
+          ],
+          Projection : {
+              ProjectionType: "ALL"
+          }
+        },
+        {
+          IndexName: "IlocationProv",
+          KeySchema: [
+              {
+                  AttributeName: "locationProv",
+                  KeyType: "HASH"
+              },
+              {
+                  AttributeName: "updatedAt",
+                  KeyType: "RANGE"
+              }
+          ],
+          Projection : {
+              ProjectionType: "ALL"
+          }
+        },
+        {
+          IndexName: "IlocationCity",
+          KeySchema: [
+              {
+                  AttributeName: "locationCity",
+                  KeyType: "HASH"
+              },
+              {
+                  AttributeName: "updatedAt",
+                  KeyType: "RANGE"
+              }
+          ],
+          Projection : {
+              ProjectionType: "ALL"
+          }
         }
       ]
     }

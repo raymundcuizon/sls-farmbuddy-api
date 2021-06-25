@@ -2,6 +2,7 @@ import type { AWS } from '@serverless/typescript';
 import { createFarmer, getFarmers, getFarmer, updateFarmer } from '@functions/Farmer';
 import { createCrop, getCrops, getCrop } from '@functions/Crop';
 import { createFarmersCrop, getFarmerCrops } from '@functions/FarmersCrop';
+import { reportGetCrops } from '@functions/Reports';
 import FarmBuddyFarmersTableRes from './resources/FarmBuddyFarmersTable';
 import FarmBuddyCropsTableRes from './resources/FarmBuddyCropsTable';
 import IAMFarmBuddyFarmersTable from './iam/FarmBuddyFarmersTable';
@@ -74,7 +75,8 @@ const serverlessConfiguration: AWS = {
   functions: { 
     getFarmers, createFarmer, getFarmer, updateFarmer, 
     createCrop, getCrops, getCrop, 
-    createFarmersCrop, getFarmerCrops
+    createFarmersCrop, getFarmerCrops,
+    reportGetCrops
   },
 };
 

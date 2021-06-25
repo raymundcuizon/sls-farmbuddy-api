@@ -6,7 +6,7 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-async function getFarmerCrops(event: APIGatewayProxyEvent) {
+async function getLocations(event:APIGatewayProxyEvent) {
     const { farmerId } = event.pathParameters;
     const params = {
         TableName: process.env.FARM_BUDDY_FARMERS_CROP_TABLE,
@@ -25,4 +25,5 @@ async function getFarmerCrops(event: APIGatewayProxyEvent) {
     }
 }
 
-export const main = middyfy(getFarmerCrops);
+
+export const main = middyfy(getLocations);

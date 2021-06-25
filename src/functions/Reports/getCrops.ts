@@ -6,14 +6,14 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-async function getFarmerCrops(event: APIGatewayProxyEvent) {
-    const { farmerId } = event.pathParameters;
+async function getCrops(event:APIGatewayProxyEvent) {
+    // const { farmerId } = event.pathParameters;
     const params = {
         TableName: process.env.FARM_BUDDY_FARMERS_CROP_TABLE,
-        IndexName: 'farmersCrop',
-        KeyConditionExpression: 'farmerId = :farmerId',
+        indexName: "farmersCrop",
+        KeyConditionExpression: 'cropId = :cropId',
         ExpressionAttributeValues: {
-            ':farmerId': farmerId,
+            ':cropId': '707ff47c-0c9f-411d-8f02-12f7dc947f5d',
         }
     }
     try {
@@ -25,4 +25,5 @@ async function getFarmerCrops(event: APIGatewayProxyEvent) {
     }
 }
 
-export const main = middyfy(getFarmerCrops);
+
+export const main = middyfy(getCrops);
