@@ -1,50 +1,46 @@
 export default {
     Type: "AWS::DynamoDB::Table",
     Properties: {
-      TableName: "FarmBuddyFarmersCropTable-${self:provider.stage}",
+      TableName: "FarmBuddyFarmersCropTable-test-${self:provider.stage}",
       BillingMode: "PAY_PER_REQUEST",
       AttributeDefinitions: [
         {
-          AttributeName: "id",
+          AttributeName: "pk",
           AttributeType: "S"
         },
         {
-          AttributeName: "farmerId",
+          AttributeName: "sk",
           AttributeType: "S"
         },
         {
-          AttributeName: "cropId",
-          AttributeType: "S"
-        },
-        {
-          AttributeName: "locationReg",
-          AttributeType: "S"
-        },
-        {
-          AttributeName: "locationProv",
-          AttributeType: "S"
-        },
-        {
-          AttributeName: "locationCity",
+          AttributeName: "isActive",
           AttributeType: "S"
         },
         {
           AttributeName: "updatedAt",
           AttributeType: "S"
+        },
+        {
+          AttributeName: "location",
+          AttributeType: "S"
         }
       ],
       KeySchema: [
         {
-          AttributeName: "id",
+          AttributeName: "pk",
           KeyType: "HASH"
+        },
+        {
+            AttributeName: "sk",
+            KeyType: "RANGE"
         }
       ],
       GlobalSecondaryIndexes: [
         {
-            IndexName: "farmersCrop",
+            IndexName: "isActive",
             KeySchema: [
                 {
-                    AttributeName: "farmerId",
+                    AttributeName: "isActive",
                     KeyType: "HASH"
                 },
                 {
@@ -57,58 +53,10 @@ export default {
             }
         },
         {
-          IndexName: "IcropId",
+          IndexName: "location",
           KeySchema: [
               {
-                  AttributeName: "cropId",
-                  KeyType: "HASH"
-              },
-              {
-                  AttributeName: "updatedAt",
-                  KeyType: "RANGE"
-              }
-          ],
-          Projection : {
-              ProjectionType: "ALL"
-          }
-        },
-        {
-          IndexName: "IlocationReg",
-          KeySchema: [
-              {
-                  AttributeName: "locationReg",
-                  KeyType: "HASH"
-              },
-              {
-                  AttributeName: "updatedAt",
-                  KeyType: "RANGE"
-              }
-          ],
-          Projection : {
-              ProjectionType: "ALL"
-          }
-        },
-        {
-          IndexName: "IlocationProv",
-          KeySchema: [
-              {
-                  AttributeName: "locationProv",
-                  KeyType: "HASH"
-              },
-              {
-                  AttributeName: "updatedAt",
-                  KeyType: "RANGE"
-              }
-          ],
-          Projection : {
-              ProjectionType: "ALL"
-          }
-        },
-        {
-          IndexName: "IlocationCity",
-          KeySchema: [
-              {
-                  AttributeName: "locationCity",
+                  AttributeName: "location",
                   KeyType: "HASH"
               },
               {

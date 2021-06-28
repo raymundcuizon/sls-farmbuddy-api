@@ -10,7 +10,7 @@ import { ResponseMsg } from '@libs/responseMessage';
 
 const dynamodb = new DynamoDB.DocumentClient();
 
-async function createFarmersCrop(event) {
+async function createFarmersCrop_(event) {
   const { farmerId, cropId, farmerName, cropName, landArea, plantCount, locationReg, locationProv, locationCity  } = event.body;
   const timestamp = new Date().toISOString();
   const farmersCrop = {
@@ -27,6 +27,36 @@ async function createFarmersCrop(event) {
     createdAt: timestamp,
     updatedAt: timestamp,
   };
+  try {
+    await dynamodb.put({
+      TableName: process.env.FARM_BUDDY_FARMERS_CROP_TABLE,
+      Item: farmersCrop
+    }).promise();
+    return ResponseMsg.success(farmersCrop);
+  } catch(e){
+    console.error(e);
+    return ResponseMsg.error(e.code, e.message);
+  }
+}
+
+async function createFarmersCrop(event) {
+  const { cropName, landArea, plantCount,cropStarted, cropEnding, location } = event.body;
+  const sk = `#CROPS#${cropName}`;
+  const { id } = event.requestContext.authorizer
+  const timestamp = new Date().toISOString();
+  const farmersCrop = {
+    pk: id,
+    sk,
+    landArea,
+    plantCount,
+    cropStarted,
+    isActive: true,
+    cropEnding,
+    location,
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
+  
   try {
     await dynamodb.put({
       TableName: process.env.FARM_BUDDY_FARMERS_CROP_TABLE,
